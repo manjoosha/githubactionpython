@@ -3,8 +3,8 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-      - main  # Change this if your main branch is named differently
-  workflow_dispatch:  # Allows manual triggering
+      - main 
+  workflow_dispatch:  
 
 jobs:
   build-and-push:
