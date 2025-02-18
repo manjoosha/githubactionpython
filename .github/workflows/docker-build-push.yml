@@ -1,10 +1,9 @@
 name: Build and Push Docker Image
-
 on:
   push:
     branches:
-      - main 
-  workflow_dispatch:  
+      - main  
+ 
 
 jobs:
   build-and-push:
@@ -22,8 +21,10 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/python-app:latest .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/myfirst-flaskapp:latest .
+          docker tag ${{ secrets.DOCKER_USERNAME }}/myfirst-flaskapp:latest ${{ secrets.DOCKER_USERNAME }}/myfirst-flaskapp
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/python-app:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/myfirst-flaskapp:latest
+       
