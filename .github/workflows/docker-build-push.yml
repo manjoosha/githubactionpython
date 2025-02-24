@@ -38,6 +38,6 @@ jobs:
       - name: Test Flask App Running
         run: curl -f http://localhost:5000 || (docker logs flask-app && exit 1) 
 
-          - name: Stop and Remove Container
+      - name: Stop and Remove Container
         if: always()
         run: docker stop flask-app && docker rm flask-app
