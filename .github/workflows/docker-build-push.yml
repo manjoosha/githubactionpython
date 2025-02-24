@@ -27,3 +27,17 @@ jobs:
       - name: Push Docker image to Docker Hub
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/python-app:latest
+
+      - name: Run Container in Background
+        run: |
+          docker run -d -p 5000:5000 --name flask-app ${{ secrets.DOCKER_USERNAME }}/python-app:latest
+          sleep 5  
+      - name: Check Running Containers
+        run: docker ps
+
+      - name: Test Flask App Running
+        run: curl -f http://localhost:5000 || (docker logs flask-app && exit 1) 
+
+          - name: Stop and Remove Container
+        if: always()
+        run: docker stop flask-app && docker rm flask-app
