@@ -27,17 +27,17 @@ jobs:
       - name: Push Docker image to Docker Hub
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/python-app:latest
+  
+      - name: Create a Docker network
+        run: docker network create flask_network
 
       - name: Run Container in Background
         run: |
-          docker run -d --network host --name flask-app ${{ secrets.DOCKER_USERNAME }}/python-app:latest
+          docker run --network flask_network --name flask-app ${{ secrets.DOCKER_USERNAME }}/python-app:latest
           sleep 5 
-      - name: Check Running Containers
-        run: docker ps
+
+      - name: Get Container IP
+        run: echo "FLASK_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' flask-app)" >> $GITHUB_ENV
 
       - name: Test Flask App Running
-        run: docker exec flask-app curl -f http://127.0.0.1:5000
-
-      - name: Stop and Remove Container
-        if: always()
-        run: docker stop flask-app && docker rm flask-app
+        run: curl -f http://$FLASK_IP:5000
